@@ -406,6 +406,4 @@ The most transferable idea is the smallest one: make the boundaries fail loudly.
 
 ---
 
-<sub>Screenshots are from a temporary workshop account; all resources have been
-deleted. Built with [`build_story.py`](build_story.py) from
-[`story_manifest.py`](story_manifest.py).</sub>
+
