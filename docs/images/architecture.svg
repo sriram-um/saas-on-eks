@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" role="img" aria-labelledby="arch-title arch-desc">
+  <title id="arch-title">Control plane and data plane architecture</title>
+  <desc id="arch-desc">A git repository feeds Argo CD on a control plane cluster, which reconciles kro blueprints and tenant resources onto a separate data plane cluster. On the data plane, kro expands each Tenant resource into a tenant namespace, and ACK provisions the matching AWS resources. Basic tenants share a pooled node and pooled data stores while the Pro tenant has dedicated ones.</desc>
+  <style>
+    .lbl{font:600 13px ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;fill:#0f172a}
+    .sub{font:400 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:#475569}
+    .hdr{font:700 11px ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;fill:#64748b;letter-spacing:.09em}
+    .box{fill:#fff;stroke:#cbd5e1;stroke-width:1.5;rx:8}
+    .plane{fill:#f8fafc;stroke:#94a3b8;stroke-width:1.5;stroke-dasharray:5 4}
+    .aws{fill:#fff7ed;stroke:#fdba74;stroke-width:1.5}
+    .pro{fill:#eef2ff;stroke:#a5b4fc;stroke-width:1.5}
+    .pool{fill:#f0fdfa;stroke:#5eead4;stroke-width:1.5}
+    .flow{stroke:#64748b;stroke-width:1.6;fill:none;marker-end:url(#a)}
+    .deny{stroke:#dc2626;stroke-width:1.8;fill:none;stroke-dasharray:4 3}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="24" width="180" height="86" class="box" rx="8"/>
+  <text x="110" y="52" text-anchor="middle" class="lbl">Git repository</text>
+  <text x="110" y="72" text-anchor="middle" class="sub">tenants/*.yaml</text>
+  <text x="110" y="90" text-anchor="middle" class="sub">resourceGraphs/*.yaml</text>
+
+  <path d="M200 67 H262" class="flow"/>
+  <text x="231" y="58" text-anchor="middle" class="sub">push</text>
+
+  <rect x="262" y="14" width="270" height="106" class="plane" rx="10"/>
+  <text x="278" y="34" class="hdr">CONTROL PLANE CLUSTER</text>
+  <rect x="280" y="44" width="110" height="60" class="box" rx="8"/>
+  <text x="335" y="70" text-anchor="middle" class="lbl">Argo CD</text>
+  <text x="335" y="88" text-anchor="middle" class="sub">GitOps</text>
+  <rect x="404" y="44" width="112" height="60" class="box" rx="8"/>
+  <text x="460" y="70" text-anchor="middle" class="lbl">kro + ACK</text>
+  <text x="460" y="88" text-anchor="middle" class="sub">capabilities</text>
+
+  <path d="M397 120 V168" class="flow"/>
+  <text x="470" y="146" text-anchor="middle" class="sub">reconciles onto</text>
+
+  <rect x="40" y="168" width="820" height="366" class="plane" rx="10"/>
+  <text x="58" y="190" class="hdr">DATA PLANE CLUSTER</text>
+
+  <rect x="58" y="204" width="180" height="76" class="box" rx="8"/>
+  <text x="148" y="230" text-anchor="middle" class="lbl">kro</text>
+  <text x="148" y="249" text-anchor="middle" class="sub">Tenant &#8594; namespace</text>
+  <text x="148" y="266" text-anchor="middle" class="sub">6 blueprints</text>
+
+  <rect x="58" y="298" width="180" height="76" class="box" rx="8"/>
+  <text x="148" y="324" text-anchor="middle" class="lbl">ACK</text>
+  <text x="148" y="343" text-anchor="middle" class="sub">AWS API as CRDs</text>
+  <text x="148" y="360" text-anchor="middle" class="sub">Pod Identity</text>
+
+  <path d="M238 242 H300" class="flow"/>
+
+  <rect x="300" y="204" width="248" height="150" class="pool" rx="8"/>
+  <text x="316" y="226" class="hdr">POOLED &#183; BASIC TIER</text>
+  <rect x="316" y="238" width="100" height="46" class="box" rx="6"/>
+  <text x="366" y="258" text-anchor="middle" class="sub">tenant-001</text>
+  <text x="366" y="274" text-anchor="middle" class="sub">1 replica</text>
+  <rect x="428" y="238" width="100" height="46" class="box" rx="6"/>
+  <text x="478" y="258" text-anchor="middle" class="sub">tenant-002</text>
+  <text x="478" y="274" text-anchor="middle" class="sub">1 replica</text>
+  <text x="424" y="308" text-anchor="middle" class="sub">shared node &#183; taint basic-tier</text>
+  <text x="424" y="330" text-anchor="middle" class="sub">shared table + bucket</text>
+  <text x="424" y="346" text-anchor="middle" class="sub">nova-micro</text>
+
+  <rect x="576" y="204" width="248" height="150" class="pro" rx="8"/>
+  <text x="592" y="226" class="hdr">SILOED &#183; PRO TIER</text>
+  <rect x="592" y="238" width="216" height="46" class="box" rx="6"/>
+  <text x="700" y="258" text-anchor="middle" class="sub">tenant-004</text>
+  <text x="700" y="274" text-anchor="middle" class="sub">3 replicas &#183; HPA 3&#8594;10</text>
+  <text x="700" y="308" text-anchor="middle" class="sub">dedicated nodepool &#183; 20 CPU / 40Gi</text>
+  <text x="700" y="330" text-anchor="middle" class="sub">dedicated table + bucket</text>
+  <text x="700" y="346" text-anchor="middle" class="sub">nova-lite</text>
+
+  <path d="M548 279 H576" class="deny"/>
+  <circle cx="562" cy="279" r="11" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <path d="M557 274 l10 10 M567 274 l-10 10" stroke="#dc2626" stroke-width="1.8"/>
+
+  <path d="M238 336 H300" class="flow"/>
+  <rect x="300" y="392" width="524" height="118" class="aws" rx="8"/>
+  <text x="316" y="414" class="hdr">AWS ACCOUNT</text>
+  <rect x="316" y="428" width="118" height="64" class="box" rx="6"/>
+  <text x="375" y="452" text-anchor="middle" class="sub">DynamoDB</text>
+  <text x="375" y="470" text-anchor="middle" class="sub">pooled + per-tenant</text>
+  <rect x="446" y="428" width="118" height="64" class="box" rx="6"/>
+  <text x="505" y="452" text-anchor="middle" class="sub">S3</text>
+  <text x="505" y="470" text-anchor="middle" class="sub">prefix-scoped</text>
+  <rect x="576" y="428" width="112" height="64" class="box" rx="6"/>
+  <text x="632" y="452" text-anchor="middle" class="sub">IAM roles</text>
+  <text x="632" y="470" text-anchor="middle" class="sub">one per tenant</text>
+  <rect x="700" y="428" width="108" height="64" class="box" rx="6"/>
+  <text x="754" y="452" text-anchor="middle" class="sub">Bedrock</text>
+  <text x="754" y="470" text-anchor="middle" class="sub">model by tier</text>
+
+  <path d="M424 354 V392" class="flow"/>
+  <path d="M700 354 V392" class="flow"/>
+</svg>
